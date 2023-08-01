@@ -26,8 +26,8 @@ class Coupons
     #[ORM\Column]
     private ?int $max_usage = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $validity = null;
+    #[ORM\Column(type: 'datetime_immutable', options: ['default' => 'CURRENT_TIMESTAMP'])]
+    private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column]
     private ?bool $is_valid = null;
