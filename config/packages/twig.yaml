@@ -5,5 +5,3 @@ when@test:
     twig:
         strict_variables: true
 
-date:
-    timezone: "Europe/Paris"
