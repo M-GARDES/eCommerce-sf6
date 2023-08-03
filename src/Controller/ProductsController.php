@@ -19,6 +19,7 @@ class ProductsController extends AbstractController
     }
     
     #[Route('/{id}', name: 'details')]
+    #[ParamConverter('product', class: 'App\Entity\Products')]
     public function details(Products $product): Response
     {
     // dump & die ($product)
