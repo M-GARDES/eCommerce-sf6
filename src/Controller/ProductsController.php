@@ -7,8 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-
-
 #[Route('/produits', name: 'products_')]
 class ProductsController extends AbstractController
 {
@@ -19,7 +17,6 @@ class ProductsController extends AbstractController
     }
     
     #[Route('/{id}', name: 'details')]
-    #[ParamConverter('product', class: 'App\Entity\Products')]
     public function details(Products $product): Response
     {
     // dump & die ($product)
