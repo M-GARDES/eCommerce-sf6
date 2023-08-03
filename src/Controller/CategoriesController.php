@@ -13,7 +13,7 @@ class CategoriesController extends AbstractController
 {
     
     #[Route('/{id}', name: 'list')]
-    #[ParamConverter('categorie', class: 'App\Entity\Categories')]
+    #[ParamConverter('categories', class: 'App\Entity\Categories')]
     public function list(Categories $categories): Response
     {
         $produitDeLaliste = $category->getProducts();
