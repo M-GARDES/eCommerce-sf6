@@ -60,7 +60,7 @@ class Categories
         return $this->categoryOrder;
     }
 
-    public function setCagetCategoryOrder(int $categoryOrder): static
+    public function setCategoryOrder(int $categoryOrder): self
     {
         $this->categoryOrder = $categoryOrder;
         return $this;
