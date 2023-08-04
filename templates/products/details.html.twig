@@ -12,15 +12,15 @@
                 <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-indicators">
                         {% for iteration in 1..product.images|length %}
-                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ iteration - 1 }}" {{ (loop.first ) ?'class="active" aria-current="true"' : '' }} aria-label="Slide {{ iteration }}"></button>
-                        {% endfor %}
+							<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ iteration - 1 }}" {{ (loop.first ) ? 'class="active" aria-current="true"' : '' }} aria-label="Slide {{ iteration - 1 }}"></button>
+						{% endfor %}
                     </div>
                     <div class="carousel-inner">
-                        {% for image in product.images %}
-                            <div class="carousel-item {{ (loop.first ) ? 'active' : '' }}">
-                                <img src="{{ asset('assets/uploads/products/mini/300x300-') ~ image.name }}" class="d-block w-100" alt="{{ product.name }}">
-                            </div>
-                        {% endfor %}
+						{% for image in product.images %}
+							<div class="carousel-item {{ (loop.first) ? 'active' : '' }}">
+								<img src={{ asset('assets/uploads/') ~ image.name }} class="d-block w-100" alt="{{ product.name }}">
+							</div>
+						{% endfor %}
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -37,7 +37,7 @@
                 <p>Categories : {{ product.categories.name}}</p>
                 <p>prix ; {{ product.price / 100}} €</p>
                  {% if product.stock > 0 %}
-                    <a href="{{ path('cart_add', {id: product.id}) }}" class="btn btn-success">Ajouter au panier</a>
+                    <a href="" class="btn btn-success">Ajouter au panier</a>
                 {% else %}
                     <p class="text-danger">Temporairement en rupture de stock</p>
                 {% endif %}
