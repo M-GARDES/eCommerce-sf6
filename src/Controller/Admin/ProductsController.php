@@ -17,16 +17,19 @@ class ProductsController extends AbstractController
 
     #[Route('/ajout', name:'add')]
     public function add(): Response {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('admin/products/index.html.twig');
     }
 
-    #[Route('/edition/{id}', name:'editx')]
+    #[Route('/edition/{id}', name:'edit')]
     public function edit(Products $products): Response {
+        $this->denyAccessUnlessGranted('PRODUCT_EDIT', $products);
         return $this->render('admin/products/index.html.twig');
     }
 
     #[Route('/supression/{id}', name:'delete')]
     public function delete(Products $products): Response {
+        $this->denyAccessUnlessGranted('PRODUCT_DELTE', $products);
         return $this->render('admin/products/index.html.twig');
     }
 } 
