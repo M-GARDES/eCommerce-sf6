@@ -1,1 +1,7 @@
-{{ form(productForm) }}
+{{ form_start(productForm) }}
+    {{ form_row(productForm.name) }}
+    {{ form_row(productForm.description) }}
+    {{ form_row(productForm.price) }}
+    {{ form_row(productForm.stock) }}
+    <button type="submit">Valider</button>
+{{ form_end(productForm) }}
