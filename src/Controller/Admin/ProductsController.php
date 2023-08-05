@@ -29,7 +29,7 @@ class ProductsController extends AbstractController
 
     #[Route('/supression/{id}', name:'delete')]
     public function delete(Products $products): Response {
-        $this->denyAccessUnlessGranted('PRODUCT_DELTE', $products);
+        $this->denyAccessUnlessGranted('PRODUCT_DELETE', $products);
         return $this->render('admin/products/index.html.twig');
     }
 } 
