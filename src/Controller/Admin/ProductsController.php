@@ -54,13 +54,13 @@ class ProductsController extends AbstractController
 
             $this->addFlash('succes', 'Produit ajouté avec succés'); //stokke
             return $this->redirectToRoute('admin_products_index');//redirige
-    }
+        }
 
             //return $this->render('admin/products/add.html.twig',[
             //'productForm' => $productForm->createView()
             //]);
             //ou 
-            return $this->renderForm('admin/products/add.html.twig', compact('productForm'));
+            return $this->renderForm('admin/products/add.html.twiG', compact('productForm'));
     }
     
 
