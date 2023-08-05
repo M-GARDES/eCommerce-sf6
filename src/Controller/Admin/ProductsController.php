@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Products;
+use App\Form\ProductsFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,7 +20,15 @@ class ProductsController extends AbstractController
     public function add(): Response {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        return $this->render('admin/products/add.html.twig');
+        //creation'nouveau produit'
+        $product = new Products();
+
+        //crea form
+        $productForm = $this->createForm(ProductsFormType::class,$product);
+
+        return $this->render('admin/products/add.html.twig',[
+            'productForm' => $productForm->createView()
+        ]);
     }
     
 
