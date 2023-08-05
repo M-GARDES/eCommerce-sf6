@@ -26,11 +26,11 @@ class ProductsController extends AbstractController
         //crea form
         $productForm = $this->createForm(ProductsFormType::class,$product);
 
-        //return $this->render('admin/products/add.html.twig',[
-           // 'productForm' => $productForm->createView()
-        //]);
+        return $this->render('admin/products/add.html.twig',[
+          'productForm' => $productForm->createView()
+        ]);
         //ou 
-        return $this->renderForm('admin/products/add.html.twig', compact('productForm'));
+        //return $this->renderForm('admin/products/add.html.twig', compact('productForm'));
     }
     
 
