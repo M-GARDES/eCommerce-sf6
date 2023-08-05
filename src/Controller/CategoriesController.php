@@ -16,7 +16,7 @@ class CategoriesController extends AbstractController
     
     #[Route('/{id}', name: 'list')]
     public function list(Categories $category): Response
-    {
+    {   
         $produitDeLaliste = $category->getProducts();
         return $this->render('categories/list.html.twig', [
             'category' => $category,
