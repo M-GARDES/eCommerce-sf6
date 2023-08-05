@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controller\Admin;
-
 use App\Entity\Products;
 use App\Form\ProductsFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,9 +37,11 @@ class ProductsController extends AbstractController
         //verification si le formulaire est soumit et valide
         if($productForm->isSubmitted() && $productForm->isValid())
         {
+            $images = $productForm->get('images')->getData();
+
+    
         //generation du slugg
-            $slug = $slugger->slug($product->getName()); 
-            //dd($slug);
+            $slug = $slugger->slug($product->getName());
             $product->setSlug($slug);
             //arrondir le prix 
             $prix = $product->getPrice() * 100;
