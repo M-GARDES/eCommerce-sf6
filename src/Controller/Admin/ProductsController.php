@@ -37,10 +37,11 @@ class ProductsController extends AbstractController
 
         //verification si le formulaire est soumit et valide
         if($productForm->isSubmitted() && $productForm->isValid())
+        {
         //generation du slugg
-            //$slug = $slugger->slug($product->getName()); 
+            $slug = $slugger->slug($product->getName()); 
             //dd($slug);
-            //$product->setSlug($slug);
+            $product->setSlug($slug);
             //arrondir le prix 
             $prix = $product->getPrice() * 100;
             $product->setPrice($prix);
@@ -48,18 +49,17 @@ class ProductsController extends AbstractController
             //dd($prix);
 
             $em->persist($product);//stokker les infos et executer dns la bdd
-            $em->flush();
+            $em->flush();//et executer dns la bdd
 
-            $this->addFlash()
+            $this->addFlash('succes', 'Produit ajouté avec succés'); //stokke
+            return $this->redirectToRoute('admin_products_index');//redirige
+    }
 
-
-
-
-        return $this->render('admin/products/add.html.twig',[
-          'productForm' => $productForm->createView()
-        ]);
-        //ou 
-        //return $this->renderForm('admin/products/add.html.twig', compact('productForm'));
+            //return $this->render('admin/products/add.html.twig',[
+            //'productForm' => $productForm->createView()
+            //]);
+            //ou 
+            return $this->renderForm('admin/products/add.html.twig', compact('productForm'));
     }
     
 
