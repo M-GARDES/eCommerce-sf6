@@ -18,7 +18,8 @@ class ProductsController extends AbstractController
     #[Route('/ajout', name:'add')]
     public function add(): Response {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        return $this->render('admin/products/index.html.twig');
+
+        return $this->render('admin/products/add.html.twig');
     }
     
 
