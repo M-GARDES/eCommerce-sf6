@@ -23,13 +23,13 @@ class ProductsController extends AbstractController
 
     #[Route('/edition/{id}', name:'edit')]
     public function edit(Products $products): Response {
-        $this->denyAccessUnlessGranted('PRODUCT_EDIT', $products);
+        $this->denyAccessUnlessGranted('PRODUCT_EDIT', $products);//verif si utilisateur peut editer avc le voter
         return $this->render('admin/products/index.html.twig');
     }
 
     #[Route('/supression/{id}', name:'delete')]
     public function delete(Products $products): Response {
-        $this->denyAccessUnlessGranted('PRODUCT_DELETE', $products);
+        $this->denyAccessUnlessGranted('PRODUCT_DELETE', $products);//verif si utilisateur peut supprim avc le voter
         return $this->render('admin/products/index.html.twig');
     }
 } 

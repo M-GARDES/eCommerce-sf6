@@ -15,7 +15,7 @@ class ProductsVoter extends Voter{
 
     private $security;
 
-    public function __construct(Security $security)
+    public function __construct(SecurityBundleSecurity $security)
     {
         $this->security = $security;
     }
@@ -39,10 +39,10 @@ class ProductsVoter extends Voter{
         $user = $token->getUser();
 
         if($user instanceof UserInterface) return false;
-         
+        
         //verif si utilisateur est admin
         if($this->security->isGranted('ROLE_ADMIN'))return true;
-
+       
         //verif les permissions si pas admin
         switch($attribute){
             case self::EDIT:
