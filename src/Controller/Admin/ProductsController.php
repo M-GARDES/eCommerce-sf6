@@ -20,6 +20,7 @@ class ProductsController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('admin/products/index.html.twig');
     }
+    
 
     #[Route('/edition/{id}', name:'edit')]
     public function edit(Products $products): Response {
