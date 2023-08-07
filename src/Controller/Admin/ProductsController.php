@@ -3,23 +3,28 @@
 namespace App\Controller\Admin;
 use App\Entity\Products;
 use App\Form\ProductsFormType;
+use App\Service\PictureService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
+
 
 #[Route('/admin/produits', name:'admin_products_')]
 class ProductsController extends AbstractController
 {
     #[Route('/', name:'index')]
     public function index(): Response {
+
+    {
+        $produits = $productsRepository->findAll();
+    }    
         return $this->render('admin/products/index.html.twig');
     }
 
     #[Route('/ajout', name:'add')]
-    public function add(Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response {
+    public function add(Request $request, EntityManagerInterface $em): Response {
 
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
@@ -38,11 +43,7 @@ class ProductsController extends AbstractController
         if($productForm->isSubmitted() && $productForm->isValid())
         {
             $images = $productForm->get('images')->getData();
-
-    
-        //generation du slugg
-            $slug = $slugger->slug($product->getName());
-            $product->setSlug($slug);
+            $folder = 'products';
             //arrondir le prix 
             $prix = $product->getPrice() * 100;
             $product->setPrice($prix);
@@ -52,27 +53,68 @@ class ProductsController extends AbstractController
             $em->persist($product);//stokker les infos et executer dns la bdd
             $em->flush();//et executer dns la bdd
 
-            $this->addFlash('succes', 'Produit ajouté avec succés'); //stokke
+            
             return $this->redirectToRoute('admin_products_index');//redirige
         }
 
-            //return $this->render('admin/products/add.html.twig',[
-            //'productForm' => $productForm->createView()
-            //]);
+            return $this->render('admin/products/add.html.twig',[
+            'productForm' => $productForm->createView()
+        ]);
             //ou 
-            return $this->renderForm('admin/products/add.html.twiG', compact('productForm'));
+            //return $this->renderForm('admin/products/add.html.twiG', compact('productForm'));
     }
     
 
     #[Route('/edition/{id}', name:'edit')]
-    public function edit(Products $products): Response {
+    public function edit(Products $products, Request $request, EntityManagerInterface $em): Response 
+    {
+
         $this->denyAccessUnlessGranted('PRODUCT_EDIT', $products);//verif si utilisateur peut editer avc le voter
-        return $this->render('admin/products/index.html.twig');
+
+         // On divise le prix par 100
+        // $prix = $product->getPrice() / 100;
+        // $product->setPrice($prix);
+
+        // On crée le formulaire
+        $productForm = $this->createForm(ProductsFormType::class, $product);
+
+        // On traite la requête du formulaire
+        $productForm->handleRequest($request);
+
+        //On vérifie si le formulaire est soumis ET valide
+        if($productForm->isSubmitted() && $productForm->isValid()){
+            // On récupère les images
+            $images = $productForm->get('images')->getData();
+
+                // On arrondit le prix 
+            $prix = $product->getPrice() * 100;
+            $product->setPrice($prix);
+
+            // On stocke
+            $em->persist($product);
+            $em->flush();
+
+            $this->addFlash('success', 'Produit modifié avec succès');
+
+            // On redirige
+            return $this->redirectToRoute('admin_products_index');
+        }
+
+        //return $this->render('admin/products/index.html.twig',[
+            //'productForm' => $productForm->createView(),
+            //'product' => $product
+           // ]};
+
+        return $this->renderForm('admin/products/edit.html.twig', compact('productForm'));
+        // ['productForm' => $productForm]
     }
+
 
     #[Route('/supression/{id}', name:'delete')]
     public function delete(Products $products): Response {
         $this->denyAccessUnlessGranted('PRODUCT_DELETE', $products);//verif si utilisateur peut supprim avc le voter
         return $this->render('admin/products/index.html.twig');
     }
+
+    
 } 
