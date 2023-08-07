@@ -23,7 +23,7 @@ class ProductsFormType extends AbstractType
                 'label' => 'Prix'
             ])
             ->add('stock', options:[
-                'label' => 'Unité en stock'
+                'label' => 'Unités en stock'
             ])
             ->add('categories', EntityType::class, [
                 'class' => Categories::class,
