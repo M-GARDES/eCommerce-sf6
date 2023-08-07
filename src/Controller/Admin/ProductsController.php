@@ -22,7 +22,7 @@ class ProductsController extends AbstractController
     }
 
     #[Route('/ajout', name:'add')]
-    public function add(): Response 
+    public function add(Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response 
     {
 
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -34,26 +34,35 @@ class ProductsController extends AbstractController
         $productForm = $this->createForm(ProductsFormType::class,$product);
 
         //traitement de la requete du formulaire
-        //$productForm->handleRequest($request);
+        $productForm->handleRequest($request);
 
         //dd($productForm); //pour le dump
 
         //verification si le formulaire est soumit et valide
-        //if($productForm->isSubmitted() && $productForm->isValid())
-       // {
+        if($productForm->isSubmitted() && $productForm->isValid())
+        {
+
+            //generer un slug
+            $slug = $slugger->slug($product->getName());
+             //dd'($slug)
+            $product->setSlug($slug);
+
           //  $images = $productForm->get('images')->getData();
           //  $folder = 'products';
-            //arrondir le prix 
-          //  $prix = $product->getPrice() * 100;
-          //  $product->setPrice($prix);
 
+            //arrondir le prix 
+            $prix = $product->getPrice() * 100;
+            $product->setPrice($prix);
             //dd($prix);
 
-           // $em->persist($product);//stokker les infos et executer dns la bdd
-           // $em->flush();//et executer dns la bdd
+            //
+            $em->persist($product);//stokker les infos et executer dns la bdd
+            $em->flush();//et executer dns la bdd
 
-            
-        //    return $this->redirectToRoute('admin_products_index');//redirige
+            //on peut mettre un messageFlash
+            //$this->addFlash('succces', 'produit ajouté avec succés);
+
+            return $this->redirectToRoute('admin_products_index');//redirige
         //}
 
         //    return $this->render('admin/products/add.html.twig',[
@@ -64,18 +73,14 @@ class ProductsController extends AbstractController
    // }
     
 
-        #[Route('/edition/{id}', name:'edit')]
-        public function edit(Products $products): Response 
+        #[Route('/edition/{id}', name: 'edit')]
+        public function edit(Products $product): Response 
         {
 
         $this->denyAccessUnlessGranted('PRODUCT_EDIT', $products);//verif si utilisateur peut editer avc le voter
 
-         // On divise le prix par 100
-        // $prix = $product->getPrice() / 100;
-        // $product->setPrice($prix);
-
         // On crée le formulaire
-        //$productForm = $this->createForm(ProductsFormType::class, $product);
+        $productForm = $this->createForm(ProductsFormType::class, $product);
 
         // On traite la requête du formulaire
         //$productForm->handleRequest($request);
