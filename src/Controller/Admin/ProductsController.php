@@ -74,7 +74,8 @@ class ProductsController extends AbstractController
     
 
         #[Route('/edition/{id}', name: 'edit')]
-        public function edit(Products $product): Response 
+        public function edit(Products $product, Request $request, EntityManagerInterface $em,
+        SluggerInterface $slugger): Response 
         {
 
         $this->denyAccessUnlessGranted('PRODUCT_EDIT', $products);//verif si utilisateur peut editer avc le voter
@@ -83,35 +84,34 @@ class ProductsController extends AbstractController
         $productForm = $this->createForm(ProductsFormType::class, $product);
 
         // On traite la requête du formulaire
-        //$productForm->handleRequest($request);
+        $productForm->handleRequest($request);
 
         //On vérifie si le formulaire est soumis ET valide
-        //if($productForm->isSubmitted() && $productForm->isValid()){
+        if($productForm->isSubmitted() && $productForm->isValid()){
+             //generer un slug
+            $slug = $slugger->slug($product->getName());
+             //dd'($slug)
+            $product->setSlug($slug);
+
             // On récupère les images
            // $images = $productForm->get('images')->getData();
 
                 // On arrondit le prix 
-           // $prix = $product->getPrice() * 100;
-           // $product->setPrice($prix);
+            $prix = $product->getPrice() * 100;
+            $product->setPrice($prix);
 
             // On stocke
-           // $em->persist($product);
-           // $em->flush();
+            $em->persist($product);
+            $em->flush();
 
-           // $this->addFlash('success', 'Produit modifié avec succès');
+            $this->addFlash('success', 'Produit modifié avec succès');
 
-            // On redirige
-            return $this->render('admin/product/index.html.twig');
-        //}
-
-        //return $this->render('admin/products/index.html.twig',[
-            //'productForm' => $productForm->createView(),
-            //'product' => $product
-           // ]};
-
-        //return $this->renderForm('admin/products/edit.html.twig', compact('productForm'));
-        // ['productForm' => $productForm]
+            // On redirige     
+        return $this->redirectRoute('admin_products_index');
         }
+
+        return $this->renderForm('admin/products/edit.html.twig', compact('productForm'));
+    }
 
 
     #[Route('/supression/{id}', name:'delete')]
