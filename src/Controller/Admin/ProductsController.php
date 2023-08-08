@@ -108,7 +108,5 @@ class ProductsController extends AbstractController
     public function delete(Products $products): Response {
         $this->denyAccessUnlessGranted('PRODUCT_DELETE', $products);//verif si utilisateur peut supprim avc le voter
         return $this->render('admin/products/index.html.twig');
-    }
-
-    
+    } 
 } 

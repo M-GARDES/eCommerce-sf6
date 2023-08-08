@@ -38,7 +38,7 @@ class ProductsVoter extends Voter{
        //recup utilisateur/token
         $user = $token->getUser();
 
-        if($user instanceof UserInterface) return false;
+        if(!$user instanceof UserInterface) return false;
         
         //verif si utilisateur est admin
         if($this->security->isGranted('ROLE_ADMIN'))return true;
