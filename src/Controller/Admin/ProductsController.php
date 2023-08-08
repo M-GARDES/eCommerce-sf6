@@ -6,111 +6,101 @@ use App\Form\ProductsFormType;
 use App\Service\PictureService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpClient\Exception\RedirectionException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
-
 
 #[Route('/admin/produits', name:'admin_products_')]
 class ProductsController extends AbstractController
 {
     #[Route('/', name:'index')]
     public function index(): Response 
-    {     
+    {   
         return $this->render('admin/products/index.html.twig');
     }
+
+
 
     #[Route('/ajout', name:'add')]
     public function add(Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response 
     {
 
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        return $this->render('admin/product/index.html.twig');
 
-        //creation'nouveau produit'
+        //creer nouveau produit
         $product = new Products();
-        //crea form
-        $productForm = $this->createForm(ProductsFormType::class,$product);
 
-        //traitement de la requete du formulaire
+        //creer le formulaire
+        $productForm = $this->createForm(ProductsFormType::class, $product);
+         
+        //traitement requete formulaire
         $productForm->handleRequest($request);
 
-        //dd($productForm); //pour le dump
+        //dd($productform);
 
-        //verification si le formulaire est soumit et valide
-        if($productForm->isSubmitted() && $productForm->isValid())
-        {
+        //verifi si form soumis et valide
+        if($productForm->isSubmitted() && $productForm->isValid()){
+            //generer le slug
+            //$slug = $slugger->slug($product->getName());
+            //$product->setSlug($slug);
 
-            //generer un slug
-            $slug = $slugger->slug($product->getName());
-             //dd'($slug)
-            $product->setSlug($slug);
-
-          //  $images = $productForm->get('images')->getData();
-          //  $folder = 'products';
-
-            //arrondir le prix 
+            //arrondir le prix
             $prix = $product->getPrice() * 100;
             $product->setPrice($prix);
-            //dd($prix);
 
-            //
-            $em->persist($product);//stokker les infos et executer dns la bdd
-            $em->flush();//et executer dns la bdd
+            $em->persist($product);//stokker info
+            $em->flush();//executer et stokker dans la bdd
 
-            //on peut mettre un messageFlash
-            //$this->addFlash('succces', 'produit ajouté avec succés);
+            //possibilite de messageFlash
+            $this->addFlash('success', 'Produit ajouté avec succés');
 
-            return $this->redirectToRoute('admin_products_index');//redirige
-        //}
+            //Redirection
+            return $this->redirectToRoute('admin_products_index');
+        }
 
-        //    return $this->render('admin/products/add.html.twig',[
-         //   'productForm' => $productForm->createView()
-        //]);
-            //ou 
-            return $this->renderForm('admin/products/add.html.twig', compact('productForm'));
-   // }
+            return $this->render('admin/products/add.html.twig',[
+                'productform' => $productForm->createView()
+        ]);      
+           //ou
+        //return $this->renderForm('admin/products/add.html.twig', 
+        //compact('productForm'))  
+    }
     
 
-        #[Route('/edition/{id}', name: 'edit')]
-        public function edit(Products $product, Request $request, EntityManagerInterface $em,
-        SluggerInterface $slugger): Response 
-        {
+    #[Route('/edition/{id}', name:'edit')]
+    public function edit(Products $product, Request $request, EntityManagerInterface $em): Response 
+    {
 
-        $this->denyAccessUnlessGranted('PRODUCT_EDIT', $products);//verif si utilisateur peut editer avc le voter
+        $this->denyAccessUnlessGranted('PRODUCT_EDIT', $product);//verif si utilisateur peut editer avc le voter
 
         // On crée le formulaire
         $productForm = $this->createForm(ProductsFormType::class, $product);
-
-        // On traite la requête du formulaire
+        
         $productForm->handleRequest($request);
-
-        //On vérifie si le formulaire est soumis ET valide
+      
         if($productForm->isSubmitted() && $productForm->isValid()){
-             //generer un slug
-            $slug = $slugger->slug($product->getName());
-             //dd'($slug)
-            $product->setSlug($slug);
 
-            // On récupère les images
-           // $images = $productForm->get('images')->getData();
-
-                // On arrondit le prix 
+            //arrondir le prix
             $prix = $product->getPrice() * 100;
             $product->setPrice($prix);
 
-            // On stocke
-            $em->persist($product);
-            $em->flush();
+            $em->persist($product);//stokker info
+            $em->flush();//executer et stokker dans la bdd
 
-            $this->addFlash('success', 'Produit modifié avec succès');
+            //possibilite de messageFlash
+            $this->addFlash('success', 'Produit ajouté avec succés');
 
-            // On redirige     
-        return $this->redirectRoute('admin_products_index');
+            //Redirection
+            return $this->redirectToRoute('admin_products_index');
         }
-
-        return $this->renderForm('admin/products/edit.html.twig', compact('productForm'));
+        return $this->render('admin/products/edit.html.twig',[
+            'productForm' => $productForm->createView()
+    ]);      
+        //ou
+        //return $this->renderForm('admin/products/edit.html.twig', 
+        //compact('productForm')); 
     }
 
 
