@@ -75,6 +75,10 @@ class ProductsController extends AbstractController
 
         $this->denyAccessUnlessGranted('PRODUCT_EDIT', $product);//verif si utilisateur peut editer avc le voter
 
+        //diviser le prix par 100
+        $prix = $product->getPrice() / 100;
+        $product->setPrice($prix);
+
         // On crée le formulaire
         $productForm = $this->createForm(ProductsFormType::class, $product);
         
@@ -90,7 +94,7 @@ class ProductsController extends AbstractController
             $em->flush();//executer et stokker dans la bdd
 
             //possibilite de messageFlash
-            $this->addFlash('success', 'Produit ajouté avec succés');
+            $this->addFlash('success', 'Produit modifié avec succés');
 
             //Redirection
             return $this->redirectToRoute('admin_products_index');
