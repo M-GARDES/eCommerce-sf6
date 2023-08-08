@@ -10,7 +10,7 @@ use Symfony\Component\HttpClient\Exception\RedirectionException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
+
 
 #[Route('/admin/produits', name:'admin_products_')]
 class ProductsController extends AbstractController
@@ -24,7 +24,7 @@ class ProductsController extends AbstractController
 
 
     #[Route('/ajout', name:'add')]
-    public function add(Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response 
+    public function add(Request $request, EntityManagerInterface $em): Response 
     {
 
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -38,7 +38,7 @@ class ProductsController extends AbstractController
         //traitement requete formulaire
         $productForm->handleRequest($request);
 
-        //dd($productform);
+        //dd($productForm);
 
         //verifi si form soumis et valide
         if($productForm->isSubmitted() && $productForm->isValid()){
@@ -61,7 +61,7 @@ class ProductsController extends AbstractController
         }
 
             return $this->render('admin/products/add.html.twig',[
-                'productform' => $productForm->createView()
+                'productForm' => $productForm->createView()
         ]);      
            //ou
         //return $this->renderForm('admin/products/add.html.twig', 

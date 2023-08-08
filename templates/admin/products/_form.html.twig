@@ -4,5 +4,5 @@
     {{ form_row(productForm.categories) }}
     {{ form_row(productForm.price) }}
     {{ form_row(productForm.stock) }}
-    <button type="submit" class="btn btn-primary">Valider</button>
+    <button type="submit" class="btn btn-primary">{{button_label|default('Ajouter') }}</button>
 {{ form_end(productForm) }}
