@@ -1,0 +1,7 @@
+.error-404-page {
+    background-image: url('/assets/Pictures/modelerror.jpg');
+    background-size:contain;
+    background-repeat: no-repeat; 
+    background-position: center center; 
+    height: 100vh; 
+}
